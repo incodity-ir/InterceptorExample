@@ -49,6 +49,13 @@ namespace InterceptorExample.web
                 return await Services.CreateShortenLink(request.Url, cancellationToken);
             });
 
+            app.MapGet("/{short_Code}", async ([FromRoute(Name = "short_Code")] string shortenCode, ShortenUrlService Services, CancellationToken cancellationToken) =>
+            {
+                var destinationUrl = await Services.GetDestinationUrlAsync(shortenCode,cancellationToken);
+
+                return Results.Redirect(destinationUrl);
+            });
+
             app.Run();
         }
     }

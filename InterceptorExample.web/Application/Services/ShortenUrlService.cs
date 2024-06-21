@@ -1,5 +1,6 @@
 ﻿using InterceptorExample.web.Domain;
 using InterceptorExample.web.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace InterceptorExample.web.Application.Services
 {
@@ -30,6 +31,13 @@ namespace InterceptorExample.web.Application.Services
             return Guid.NewGuid().ToString().Substring(0, 5);
         }
 
+        public async Task<string> GetDestinationUrlAsync(string shortenCode, CancellationToken cancellationToken)
+        {
+            var destination = await _context.Links.FirstOrDefaultAsync(p => p.shortenUrl == shortenCode);
 
+            if (destination is null) throw new ArgumentNullException(nameof(destination));
+
+            return destination.destenationUrl;
+        }
     }
 }
